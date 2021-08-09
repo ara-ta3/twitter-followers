@@ -1,7 +1,10 @@
 CARGO=cargo
 
-build:
+build: .env
 	$(CARGO) build
 
-run:
-	$(CARGO) run
+run: .env
+	set -o allexport && . ./$< && $(CARGO) run
+
+.env: env.sample
+	cp -f $< $@
