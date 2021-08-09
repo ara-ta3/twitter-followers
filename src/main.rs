@@ -21,8 +21,18 @@ async fn main() {
         consumer: con_token,
         access: access_token,
     };
-    let u = egg_mode::user::show("rustlang", &token).await.unwrap();
-    println!("{} (@{})", u.name, u.screen_name);
+    // let u = egg_mode::user::show("rustlang", &token).await.unwrap();
+    // println!("{} (@{})", u.name, u.screen_name);
+    let mut list = egg_mode::user::followers_of("ara_ta3", &token).with_page_size(20);
+    let resp = list.call().await.unwrap();
+    for user in resp.response.users {
+        println!("{} (@{})", user.name, user.screen_name);
+    }
+    list.next_cursor = resp.response.next_cursor;
+    let resp = list.call().await.unwrap();
+    for user in resp.response.users {
+        println!("{} (@{})", user.name, user.screen_name);
+    }
 }
 
 #[derive(Envconfig, Debug)]
