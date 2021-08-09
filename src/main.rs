@@ -2,7 +2,8 @@ use envconfig::Envconfig;
 use envconfig_derive::Envconfig;
 use std::process;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let config = match Config::init() {
         Ok(val) => val,
         Err(err) => {
@@ -10,7 +11,18 @@ fn main() {
             process::exit(1);
         }
     };
-    println!("{:#?}", config)
+    let con_token =
+        egg_mode::KeyPair::new(config.twitter_consumer_key, config.twitter_consumer_secret);
+    let access_token = egg_mode::KeyPair::new(
+        config.twitter_access_token_key,
+        config.twitter_access_token_secret,
+    );
+    let token = egg_mode::Token::Access {
+        consumer: con_token,
+        access: access_token,
+    };
+    let u = egg_mode::user::show("rustlang", &token).await.unwrap();
+    println!("{} (@{})", u.name, u.screen_name);
 }
 
 #[derive(Envconfig, Debug)]
