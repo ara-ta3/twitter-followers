@@ -6,3 +6,5 @@ install:
 build:
 	$(CARGO) build
 
+run:
+	$(CARGO) run
