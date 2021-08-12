@@ -1,11 +1,10 @@
-use envconfig::Envconfig;
 use std::process;
 mod config;
 mod twitter;
 
 #[tokio::main]
 async fn main() {
-    let c = match config::Config::init() {
+    let c = match config::from_env() {
         Ok(val) => val,
         Err(err) => {
             println!("{}", err);

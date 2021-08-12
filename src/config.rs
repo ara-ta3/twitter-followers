@@ -1,5 +1,10 @@
 use envconfig::Envconfig;
+use envconfig::Error;
 use envconfig_derive::Envconfig;
+
+pub fn from_env() -> Result<Config, Error> {
+    return Config::init();
+}
 
 #[derive(Envconfig, Debug)]
 pub struct Config {
